@@ -3,10 +3,10 @@ import GlobalStyle from './GlobalStyle/GlobalStyle.styled';
 
 import Searchbar from './Searchbar/Searchbar';
 import Container from './Container/Container';
-import ImageGallery from './ImageGallery';
+import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
 import Button from './Button/Button';
-import Message from './Message/Message';
+import Message from './Message/Message.styled';
 
 import ApiPixabay from './ApiPixabay/ApiPixabay';
 import { errorMessages } from './Constants/Constants';
@@ -53,11 +53,13 @@ class App extends Component {
 
     try {
       const { hits } = await Pixabay.getPictures();
-      this.setState(state => ({
-        pictures: [...state.pictures, ...hits],
-        countLoadMore: state.countLoadMore - hits.length,
-      }));
-      this.scroll();
+      this.setState(
+        state => ({
+          pictures: [...state.pictures, ...hits],
+          countLoadMore: state.countLoadMore - hits.length,
+        }),
+        this.scroll
+      );
     } catch (error) {
       this.setState({ message: errorMessages.messageNetError });
     } finally {
@@ -66,8 +68,10 @@ class App extends Component {
   };
 
   scroll = () => {
-    // window.scrollByPages(-1);
-    window.scrollBy(0, window.screen.availHeight / 4);
+    window.scrollBy({
+      top: window.screen.availHeight + 40,
+      behavior: 'smooth',
+    });
   };
 
   render() {

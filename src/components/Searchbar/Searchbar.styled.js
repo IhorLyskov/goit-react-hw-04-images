@@ -33,7 +33,7 @@ export const SearchFormStyled = styled(Form)`
 
 export const SearchBtnStyled = styled.button`
   display: inline-block;
-  width: 48px;
+  min-width: 48px;
   height: 48px;
   border: 0;
   background-size: 40%;
@@ -61,7 +61,6 @@ export const SearchInputStyled = styled(Field)`
   line-height: 1.3em;
 
   &::placeholder {
-    font: inherit;
     font-size: 18px;
   }
 `;

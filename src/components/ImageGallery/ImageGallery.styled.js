@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const UlStyled = styled.ul`
+const ImageGalleryStyled = styled.ul`
   display: grid;
   max-width: calc(100vw - 48px);
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -13,4 +13,4 @@ const UlStyled = styled.ul`
   margin-right: auto;
 `;
 
-export default UlStyled;
+export default ImageGalleryStyled;

@@ -1,19 +1,17 @@
-import UlStyled from './ImageGallery.styled';
-import ImageGalleryItem from '../ImageGalleryItem';
+import ImageGalleryStyled from './ImageGallery.styled';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import PropTypes from 'prop-types';
 
-function ImageGallery({ galleryItems }) {
-  return (
-    <UlStyled>
-      {galleryItems.map(item => (
-        <ImageGalleryItem key={item.id} item={item} />
-      ))}
-    </UlStyled>
-  );
-}
+const ImageGallery = ({ galleryItems }) => (
+  <ImageGalleryStyled>
+    {galleryItems.map(item => (
+      <ImageGalleryItem key={item.id} item={item} />
+    ))}
+  </ImageGalleryStyled>
+);
 
 ImageGallery.propTypes = {
-  galleryItems: PropTypes.array,
+  galleryItems: PropTypes.arrayOf(PropTypes.shape),
 };
 
 export default ImageGallery;

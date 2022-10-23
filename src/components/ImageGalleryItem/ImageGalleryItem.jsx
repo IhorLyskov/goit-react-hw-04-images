@@ -1,6 +1,6 @@
 import Modal from '../Modal';
 import { Component } from 'react';
-import { LiStyled, ImgStyled } from './ImageGalleryItem.styled';
+import { ImageGalleryItemStyled, ImgStyled } from './ImageGalleryItem.styled';
 import PropTypes from 'prop-types';
 
 class ImageGalleryItem extends Component {
@@ -8,29 +8,26 @@ class ImageGalleryItem extends Component {
     isModalOpen: false,
   };
 
-  toggleModal = () => {
-    this.setState(prevState => {
-      return {
-        isModalOpen: !prevState.isModalOpen,
-      };
-    });
+  toggleModalOpen = () => {
+    this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
   };
 
   render() {
     const { item } = this.props;
     const { webformatURL, tags } = item;
     const { isModalOpen } = this.state;
+
     return (
       <>
-        <LiStyled>
+        <ImageGalleryItemStyled>
           <ImgStyled
             loading="lazy"
             src={webformatURL}
             alt={tags}
-            onClick={this.toggleModal}
+            onClick={this.toggleModalOpen}
           />
-        </LiStyled>
-        {isModalOpen && <Modal item={item} onClose={this.toggleModal} />}
+        </ImageGalleryItemStyled>
+        {isModalOpen && <Modal item={item} onClose={this.toggleModalOpen} />}
       </>
     );
   }
