@@ -1,50 +1,92 @@
-import { Component } from 'react';
-import { fetchBreeds, fetchDogByBreed } from 'api';
-import { Dog } from './Dog';
-import { GlobalStyle } from './GlobalStyle';
-import { BreedSelect } from './BreedSelect';
+import React, { Component } from 'react';
+import GlobalStyle from './GlobalStyle/GlobalStyle.styled';
 
-export class App extends Component {
+import Searchbar from './Searchbar/Searchbar';
+import Container from './Container/Container';
+import ImageGallery from './ImageGallery';
+import Loader from './Loader/Loader';
+import Button from './Button/Button';
+import Message from './Message/Message';
+
+import ApiPixabay from './ApiPixabay/ApiPixabay';
+import { errorMessages } from './Constants/Constants';
+
+const Pixabay = new ApiPixabay();
+
+class App extends Component {
   state = {
-    breeds: [],
-    dog: null,
-    error: null,
+    pictures: [],
+    message: null,
+    isLoading: false,
+    countLoadMore: 0,
   };
 
-  async componentDidMount() {
-    try {
-      const breeds = await fetchBreeds();
-      this.setState({ breeds: breeds });
-    } catch (error) {
-      this.setState({
-        error:
-          'Мы не смогли загрузить породы собачек, пожалуйста перезагрузите страницу чтобы попробовать еще раз 🥹',
-      });
-    }
-  }
+  handleSearch = async ({ text }) => {
+    this.setState({ isLoading: true });
+    this.setState({ message: null });
+    this.setState({ pictures: [] });
 
-  selectBreed = async breedId => {
+    Pixabay.query = text;
+    Pixabay.resetPage();
+
     try {
-      const dog = await fetchDogByBreed(breedId);
-      console.log(dog);
-      this.setState({ dog });
-    } catch (e) {
+      const { hits, totalHits } = await Pixabay.getPictures();
+      if (totalHits === 0) {
+        this.setState({ message: errorMessages.messageNoImages });
+        return;
+      }
       this.setState({
-        error:
-          'Упс, мы не смогли загрузить собачку 😭. Попробуйте еще раз или перезагрузите страницу 😇',
+        pictures: hits,
+        countLoadMore: totalHits - hits.length,
       });
+    } catch {
+      if (!this.state.message) {
+        this.setState({ message: errorMessages.messageNetError });
+      }
+    } finally {
+      this.setState({ isLoading: false });
     }
+  };
+
+  handleLoadMoreButton = async () => {
+    this.setState({ isLoading: true });
+
+    try {
+      const { hits } = await Pixabay.getPictures();
+      this.setState(state => ({
+        pictures: [...state.pictures, ...hits],
+        countLoadMore: state.countLoadMore - hits.length,
+      }));
+      this.scroll();
+    } catch (error) {
+      this.setState({ message: errorMessages.messageNetError });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
+
+  scroll = () => {
+    // window.scrollByPages(-1);
+    window.scrollBy(0, window.screen.availHeight / 4);
   };
 
   render() {
-    const { breeds, dog, error } = this.state;
+    const { pictures, message, isLoading, countLoadMore } = this.state;
     return (
       <>
-        <BreedSelect breeds={breeds} onSelect={this.selectBreed} />
-        {error && <div>{error}</div>}
-        {dog && <Dog dog={dog} />}
         <GlobalStyle />
+        <Container>
+          <Searchbar onSearch={this.handleSearch} />
+          {message && <Message>{message}</Message>}
+          {!message && <ImageGallery galleryItems={pictures} />}
+          {isLoading && <Loader />}
+          {!message && !isLoading && countLoadMore > 0 && (
+            <Button onClick={this.handleLoadMoreButton} />
+          )}
+        </Container>
       </>
     );
   }
 }
+
+export default App;
