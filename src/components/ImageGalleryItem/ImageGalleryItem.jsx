@@ -1,4 +1,4 @@
-import Modal from '../Modal';
+import Modal from '../Modal/Modal';
 import { Component } from 'react';
 import { ImageGalleryItemStyled, ImgStyled } from './ImageGalleryItem.styled';
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ class ImageGalleryItem extends Component {
     isModalOpen: false,
   };
 
-  toggleModalOpen = () => {
+  handleToggleModalOpen = () => {
     this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
   };
 
@@ -24,10 +24,12 @@ class ImageGalleryItem extends Component {
             loading="lazy"
             src={webformatURL}
             alt={tags}
-            onClick={this.toggleModalOpen}
+            onClick={this.handleToggleModalOpen}
           />
         </ImageGalleryItemStyled>
-        {isModalOpen && <Modal item={item} onClose={this.toggleModalOpen} />}
+        {isModalOpen && (
+          <Modal item={item} onClose={this.handleToggleModalOpen} />
+        )}
       </>
     );
   }

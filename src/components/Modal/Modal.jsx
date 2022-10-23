@@ -1,25 +1,26 @@
 import { Component } from 'react';
 import { OverlayStyled, ModalStyled } from './Modal.styled';
-import { createPortal } from 'react-dom';
+import { Portal } from 'react-portal';
 import PropTypes from 'prop-types';
 
 const modalRoot = document.getElementById('modal-root');
+
 class Modal extends Component {
   componentDidMount() {
-    window.addEventListener('keydown', this.onEscapePress);
+    window.addEventListener('keydown', this.handleEscapePress);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.onEscapePress);
+    window.removeEventListener('keydown', this.handleEscapePress);
   }
 
-  onEscapePress = event => {
+  handleEscapePress = event => {
     if (event.code === 'Escape') {
       this.props.onClose();
     }
   };
 
-  onBackdropClick = event => {
+  handleBackdropClick = event => {
     if (event.target === event.currentTarget) {
       this.props.onClose();
     }
@@ -27,13 +28,14 @@ class Modal extends Component {
 
   render() {
     const { largeImageURL, tags } = this.props.item;
-    return createPortal(
-      <OverlayStyled onClick={this.onBackdropClick}>
-        <ModalStyled>
-          <img src={largeImageURL} alt={tags} />
-        </ModalStyled>
-      </OverlayStyled>,
-      modalRoot
+    return (
+      <Portal node={modalRoot}>
+        <OverlayStyled onClick={this.handleBackdropClick}>
+          <ModalStyled>
+            <img src={largeImageURL} alt={tags} />
+          </ModalStyled>
+        </OverlayStyled>
+      </Portal>
     );
   }
 }
