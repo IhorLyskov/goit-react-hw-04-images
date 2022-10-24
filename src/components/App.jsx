@@ -69,7 +69,7 @@ class App extends Component {
 
   scroll = () => {
     window.scrollBy({
-      top: window.screen.availHeight + 40,
+      top: window.screen.availHeight + 30,
       behavior: 'smooth',
     });
   };

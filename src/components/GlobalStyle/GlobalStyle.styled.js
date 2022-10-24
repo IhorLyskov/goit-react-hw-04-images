@@ -24,7 +24,7 @@ body {
   }
   img {
     display: block;
-    max-width: 100%;
+    max-width: ${p => p.theme.widthes.widthImg};
     height: auto;
   }
   ul,

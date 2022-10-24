@@ -8,35 +8,51 @@ fontSizes.xxl = fontSizes[6];
 
 export const theme = {
   colors: {
-    colorBlack: '#000',
-    colorWhite: '#fff',
-    colorText: '#2a2a2a',
+    colorText: '#fff',
     colorError: 'red',
     colorAcent: '#3f51b5',
+    colorKeyHover: '#303f9f',
   },
-  space: [0, 2, 4, 8, 16, 32, 64, 128, 256],
-  fonts: {
-    body: 'system-ui, sans-serif',
-    heading: 'system-ui, sans-serif',
-    monospace: 'Menlo, monospace',
+  fontSizes: {
+    fontSizePlaceHolder: 18,
+    fontSizeInput: 20,
+    fontSizeMessage: 30,
   },
-  fontSizes: fontSizes,
   fontWeights: {
     normal: 400,
     medium: 500,
     bold: 700,
   },
-  lineHeights: {
-    body: 1.5,
-    heading: 1.125,
+  heights: {
+    lineHeight: 24,
+    heightHeader: 40,
+    heightSearchBtn: 48,
+    heightImg: 260,
+    heightModal: 'calc(100vh - 24px)',
   },
-  borders: {
-    none: 'none',
-    normal: '1px solid',
+  widthes: {
+    widthSearchBtn: 48,
+    minWidthButton: 180,
+    maxWidthButton: 200,
+    widthSearchForm: 600,
+    widthImg: '100%',
+    widthModal: 'calc(100vw - 48px)',
+    widthGalleryColumn: 'minmax(320px, 1fr)',
   },
-  radius: {
-    none: '0',
-    normal: '5px',
-    round: '50%',
+  space: {
+    radiusButton: 2,
+    radiusGalleryItem: 2,
+    radiusSearchForm: 3,
+    paddingGorInput: 4,
+    paddingLeftInputError: 4,
+    paddingRightInputError: 6,
+    paddingVerButton: 8,
+    paddingGorButton: 16,
+    paddingVerHeader: 12,
+    paddingGorHeader: 24,
+    paddingBottomContainer: 24,
+    marginTopContainer: 10,
+    gridGapGallery: 16,
+    gridTemplateColumns: '1fr',
   },
 };

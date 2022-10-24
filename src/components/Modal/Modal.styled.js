@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const OverlayStyled = styled.div`
+export const OverlayStyled = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -13,9 +13,7 @@ const OverlayStyled = styled.div`
   z-index: 12;
 `;
 
-const ModalStyled = styled.div`
-  max-width: calc(100vw - 48px);
-  max-height: calc(100vh - 24px);
+export const ModalStyled = styled.div`
+  max-width: ${p => p.theme.widthes.widthModal};
+  max-height: ${p => p.theme.heights.heightModal};
 `;
-
-export { OverlayStyled, ModalStyled };

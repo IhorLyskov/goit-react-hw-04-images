@@ -2,15 +2,15 @@ import styled from 'styled-components';
 
 const ImageGalleryStyled = styled.ul`
   display: grid;
-  max-width: calc(100vw - 48px);
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  grid-gap: 16px;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding: 0;
+  max-width: ${p => p.theme.widthes.widthModal};
+  grid-template-columns: repeat(
+    auto-fill,
+    ${p => p.theme.widthes.widthGalleryColumn}
+  );
+  grid-gap: ${p => p.theme.space.gridGapGallery}px;
   list-style: none;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+  padding: 0;
 `;
 
 export default ImageGalleryStyled;
