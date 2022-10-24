@@ -1,11 +1,3 @@
-const fontSizes = [12, 14, 16, 20, 24, 32, 64];
-fontSizes.xs = fontSizes[0];
-fontSizes.s = fontSizes[1];
-fontSizes.m = fontSizes[2];
-fontSizes.l = fontSizes[4];
-fontSizes.xl = fontSizes[5];
-fontSizes.xxl = fontSizes[6];
-
 export const theme = {
   colors: {
     colorText: '#fff',
