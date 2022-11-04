@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import GlobalStyle from './GlobalStyle/GlobalStyle.styled';
 
 import Searchbar from './Searchbar/Searchbar';
@@ -8,89 +8,71 @@ import Loader from './Loader/Loader';
 import Button from './Button/Button';
 import Message from './Message/Message.styled';
 
-import ApiPixabay from './ApiPixabay/ApiPixabay';
+import usePixabay from './usePixabay/usePixabay';
 import { errorMessages } from './Constants/Constants';
 
-const Pixabay = new ApiPixabay();
+export default function App() {
+  const [pictures, setPictures] = useState([]);
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isScroll, setIsScroll] = useState(0);
+  const [countLoadMore, setCountLoadMore] = useState(0);
+  const { data, incPage, newQuery } = usePixabay();
 
-class App extends Component {
-  state = {
-    pictures: [],
-    message: null,
-    isLoading: false,
-    countLoadMore: 0,
+  const handleSearch = ({ text }) => {
+    setCountLoadMore(0);
+    setIsLoading(true);
+    setMessage(null);
+    setPictures([]);
+    newQuery(text);
   };
 
-  handleSearch = async ({ text }) => {
-    this.setState({ isLoading: true });
-    this.setState({ message: null });
-    this.setState({ pictures: [] });
+  const loadMore = () => {
+    setIsLoading(true);
+    incPage();
+  };
 
-    Pixabay.query = text;
-    Pixabay.resetPage();
-
-    try {
-      const { hits, totalHits } = await Pixabay.getPictures();
-      if (totalHits === 0) {
-        this.setState({ message: errorMessages.messageNoImages });
+  useEffect(() => {
+    if (!data) {
+      return;
+    } else if (data === -1) {
+      if (!message) {
+        setMessage(errorMessages.messageNetError);
+        setIsLoading(false);
         return;
       }
-      this.setState({
-        pictures: hits,
-        countLoadMore: totalHits - hits.length,
-      });
-    } catch {
-      if (!this.state.message) {
-        this.setState({ message: errorMessages.messageNetError });
-      }
-    } finally {
-      this.setState({ isLoading: false });
     }
-  };
 
-  handleLoadMoreButton = async () => {
-    this.setState({ isLoading: true });
+    const { hits, totalHits } = data;
 
-    try {
-      const { hits } = await Pixabay.getPictures();
-      this.setState(
-        state => ({
-          pictures: [...state.pictures, ...hits],
-          countLoadMore: state.countLoadMore - hits.length,
-        }),
-        this.scroll
-      );
-    } catch (error) {
-      this.setState({ message: errorMessages.messageNetError });
-    } finally {
-      this.setState({ isLoading: false });
+    if (totalHits === 0) {
+      setMessage(errorMessages.messageNoImages);
+      setIsLoading(false);
+      return;
     }
-  };
+    setPictures(pictures => [...pictures, ...hits]);
+    setIsLoading(false);
+    setIsScroll(countLoadMore);
+    countLoadMore === 0
+      ? setCountLoadMore(totalHits - hits.length)
+      : setCountLoadMore(countLoadMore - hits.length);
+    // eslint-disable-next-line
+  }, [data]);
 
-  scroll = () => {
-    window.scrollBy({
-      top: window.screen.availHeight + 30,
-      behavior: 'smooth',
-    });
-  };
-
-  render() {
-    const { pictures, message, isLoading, countLoadMore } = this.state;
-    return (
-      <>
-        <GlobalStyle />
-        <Container>
-          <Searchbar onSearch={this.handleSearch} />
-          {message && <Message>{message}</Message>}
-          {!message && <ImageGallery galleryItems={pictures} />}
-          {isLoading && <Loader />}
-          {!message && !isLoading && countLoadMore > 0 && (
-            <Button onClick={this.handleLoadMoreButton} />
-          )}
-        </Container>
-      </>
-    );
-  }
+  return (
+    <>
+      <GlobalStyle />
+      <Container>
+        <Searchbar onSearch={handleSearch} />
+        {message && <Message>{message}</Message>}
+        {!message && (
+          <ImageGallery galleryItems={pictures} isScroll={isScroll} />
+        )}
+        {isLoading && <Loader />}
+        {!message && !isLoading && countLoadMore > 0 && (
+          <Button onClick={loadMore} />
+        )}
+      </Container>
+    </>
+  );
 }
-
-export default App;

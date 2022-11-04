@@ -3,7 +3,7 @@ export const theme = {
     colorText: '#fff',
     colorError: 'red',
     colorAcent: '#3f51b5',
-    colorKeyHover: '#303f9f',
+    colorKeyHover: '#303fbf',
   },
   fontSizes: {
     fontSizePlaceHolder: 18,
@@ -32,7 +32,7 @@ export const theme = {
     widthGalleryColumn: 'minmax(320px, 1fr)',
   },
   space: {
-    radiusButton: 2,
+    radiusButton: 8,
     radiusGalleryItem: 2,
     radiusSearchForm: 3,
     paddingGorInput: 4,
